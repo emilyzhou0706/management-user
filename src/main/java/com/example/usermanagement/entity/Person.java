@@ -4,9 +4,11 @@ import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 
 @Entity
+@Table(name = "app_user")
 public class Person {
     @Id
     @Getter @Setter
@@ -40,13 +42,13 @@ public class Person {
 
     public Person() {
     }
-
+/*
     public Person(String firstName, int age, String gender, String nationality) {
         this.firstName = firstName;
         this.age = age;
         this.gender = gender;
         this.nationality = nationality;
-    }
+    }*/
 
     public Person(String username, String password, String firstName, String lastName, String email, String contactNumber, int age, String gender, String nationality, String tag, String status, String created, String updated) {
         this.username = username;
@@ -63,7 +65,7 @@ public class Person {
         this.created = created;
         this.updated = updated;
     }
-
+/*
     public Person(String username, String password, String firstName, String lastName, String email, String contactNumber, int age, String gender, String nationality, String tag) {
         this.username = username;
         this.password = password;
@@ -75,5 +77,5 @@ public class Person {
         this.gender = gender;
         this.nationality = nationality;
         this.tag = tag;
-    }
+    }*/
 }
