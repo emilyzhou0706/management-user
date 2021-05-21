@@ -9,6 +9,11 @@ public class Country {
     @Getter @Setter
     Double probability;
 
+    public Country(String country_id, Double probability) {
+        this.country_id = country_id;
+        this.probability = probability;
+    }
+
     @Override
     public String toString() {
         return "Country{" +

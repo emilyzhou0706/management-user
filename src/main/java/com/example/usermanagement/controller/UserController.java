@@ -50,7 +50,7 @@ public class UserController {
       /*  Locale l = new Locale("", "CH");
         System.out.println("hello="+l.getDisplayCountry());*/
 
-        Person person= new Person(profileReqAdd.getEmail(),profileReqAdd.getPassword(),guessAge.getName(),profileReqAdd.getLastName(),profileReqAdd.getEmail(),profileReqAdd.getContactNumber(),guessAge.getAge(),guessGender.getGender(),guessNation.getCountry().get(0).getCountry_id(),profileReqAdd.getTag(), Status.active.toString(),dateString,dateString);
+        Person person= new Person(profileReqAdd.getEmail(),profileReqAdd.getPassword(),guessAge.getName(),profileReqAdd.getLastName(),profileReqAdd.getEmail(),profileReqAdd.getContactNumber(),guessAge.getAge(),guessGender.getGender(),guessNation.getCountry().get(0).getCountry_id(),profileReqAdd.getTag(), Status.active.name(),dateString,dateString);
         userRepository.save(person);
         return "201 Created";
     }
