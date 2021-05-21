@@ -1,4 +1,5 @@
 package com.example.usermanagement.entity;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,6 +10,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "app_user")
+@EqualsAndHashCode
 public class Person {
     @Id
     @Getter @Setter
@@ -36,7 +38,9 @@ public class Person {
     String status;
 
     @Getter @Setter
+    @EqualsAndHashCode.Exclude
     String created;
+    @EqualsAndHashCode.Exclude
     @Getter @Setter
     String updated;
 

@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 
 @ExtendWith(MockitoExtension.class)
@@ -32,7 +33,7 @@ public class UserControllerTests {
     @Mock
     RestTemplate restTemplate;
 
-    @MockBean
+    @Mock
     UserRepository userRepository;
 
     @InjectMocks
@@ -73,15 +74,17 @@ public class UserControllerTests {
 
         Person person= new Person();
         person.setAge(1);
-        person.setContactNumber("12344");
+        person.setContactNumber("9876654f31");
         person.setEmail("testemail@gmail.com");
+        person.setUsername("testemail@gmail.com");
         person.setGender("male");
         person.setFirstName("tony");
         person.setPassword("123456");
         person.setLastName("albert");
         person.setTag("tag");
         person.setPassword("123456");
-        person.setNationality("LB");
+        person.setNationality("JE");
+        person.setStatus("active");
         doReturn(person).when(userRepository).save(person);
         userController.postBody(profileReqAdd);
 
