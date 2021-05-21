@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.web.client.RestTemplate;
@@ -23,8 +24,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class UserControllerTests {
@@ -72,21 +74,25 @@ public class UserControllerTests {
 
         doReturn(guessNation).when(restTemplate).getForObject("https://api.nationalize.io/?name={nameE}", GuessNation.class,profileReqAdd.getFirstName());
 
-        Person person= new Person();
-        person.setAge(1);
-        person.setContactNumber("9876654f31");
-        person.setEmail("testemail@gmail.com");
-        person.setUsername("testemail@gmail.com");
-        person.setGender("male");
-        person.setFirstName("tony");
-        person.setPassword("123456");
-        person.setLastName("albert");
-        person.setTag("tag");
-        person.setPassword("123456");
-        person.setNationality("JE");
-        person.setStatus("active");
-        doReturn(person).when(userRepository).save(person);
-        userController.postBody(profileReqAdd);
+        Person person1= new Person();
+        Person person2= new Person();
+        person1.setAge(1);
+        person1.setContactNumber("9876654f31");
+        person1.setEmail("testemail@gmail.com");
+        person1.setUsername("testemail@gmail.com");
+        person1.setGender("male");
+        person1.setFirstName("tony");
+        person1.setPassword("123456");
+        person1.setLastName("albert");
+        person1.setTag("tag");
+        person1.setPassword("123456");
+        person1.setNationality("JE");
+        person1.setStatus("active");
+        doReturn(person2).when(userRepository).save(person1);
+        //doReturn(person1).when(userRepository).save(person2);
+        String result = userController.postBody(profileReqAdd);
+        verify(userRepository, times(1)).save(person1);
+        assertEquals("201 Created", result);
 
     }
 
