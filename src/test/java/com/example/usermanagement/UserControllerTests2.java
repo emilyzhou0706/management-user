@@ -1,11 +1,8 @@
 package com.example.usermanagement;
 
-import com.example.usermanagement.constant.Status;
 import com.example.usermanagement.controller.UserController;
 import com.example.usermanagement.entity.*;
 import com.example.usermanagement.repository.UserRepository;
-import lombok.Getter;
-import lombok.Setter;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -13,23 +10,16 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.web.client.RestTemplate;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class UserControllerTests {
+public class UserControllerTests2 {
     private static final Logger log = LoggerFactory.getLogger(UserManagementApplication.class);
 
     @Mock
@@ -43,6 +33,22 @@ public class UserControllerTests {
 
     @Test
     public void testPostBody(){
+        ProfileReqAdd profileReqAdd=new ProfileReqAdd();
+        profileReqAdd.setPassword("123456");
+        profileReqAdd.setFirstName("tony");
+        profileReqAdd.setLastName("albert");
+        profileReqAdd.setEmail("testemail@gmail.com");
+        profileReqAdd.setContactNumber("9876654f31");
+        profileReqAdd.setTag("tag");
+    /*    Person person = getPerson(profileReqAdd);
+        doReturn(person2).when(userRepository).save(person1);*/
+
+        userController.postBody(profileReqAdd);
+    }
+
+    @Test
+    public void testGetPerson() {
+
         ProfileReqAdd profileReqAdd=new ProfileReqAdd();
         profileReqAdd.setPassword("123456");
         profileReqAdd.setFirstName("tony");
@@ -74,28 +80,18 @@ public class UserControllerTests {
 
         doReturn(guessNation).when(restTemplate).getForObject("https://api.nationalize.io/?name={nameE}", GuessNation.class,profileReqAdd.getFirstName());
 
-        Person person1= new Person();
-        Person person2= new Person();
-        person1.setAge(1);
-        person1.setContactNumber("9876654f31");
-        person1.setEmail("testemail@gmail.com");
-        person1.setUsername("testemail@gmail.com");
-        person1.setGender("male");
-        person1.setFirstName("tony");
-        person1.setPassword("123456");
-        person1.setLastName("albert");
-        person1.setTag("tag");
-        person1.setPassword("123456");
-        person1.setNationality("JE");
-        person1.setStatus("active");
-        doReturn(person2).when(userRepository).save(person1);
-        //doReturn(person1).when(userRepository).save(person2);
-//        String result = userController.postBody(profileReqAdd);
-        verify(userController,times(1)).postBody(profileReqAdd);
-        verify(userRepository, times(1)).save(person1);
-//        assertEquals("201 Created", result);
-
+        Person person=userController.getPerson(profileReqAdd);
+        assertEquals(1,person.getAge());
+        assertEquals("testemail@gmail.com",person.getEmail());
+        assertEquals("9876654f31",person.getContactNumber());
+        assertEquals("male",person.getGender());
+        assertEquals("tony",person.getFirstName());
+        assertEquals("albert",person.getLastName());
+        assertEquals("123456",person.getPassword());
+        assertEquals("tag",person.getTag());
+        assertEquals("JE",person.getNationality());
+        assertEquals("active",person.getStatus());
+        assertEquals("testemail@gmail.com",person.getUsername());
     }
-
 
 }
