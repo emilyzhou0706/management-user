@@ -43,20 +43,13 @@ public class UserControllerTests2 {
     /*    Person person = getPerson(profileReqAdd);
         doReturn(person2).when(userRepository).save(person1);*/
 
+        extracted(profileReqAdd);
         userController.postBody(profileReqAdd);
+//        verify(userController, times(1)).postBody(profileReqAdd);
+
     }
 
-    @Test
-    public void testGetPerson() {
-
-        ProfileReqAdd profileReqAdd=new ProfileReqAdd();
-        profileReqAdd.setPassword("123456");
-        profileReqAdd.setFirstName("tony");
-        profileReqAdd.setLastName("albert");
-        profileReqAdd.setEmail("testemail@gmail.com");
-        profileReqAdd.setContactNumber("9876654f31");
-        profileReqAdd.setTag("tag");
-
+    private void extracted(ProfileReqAdd profileReqAdd) {
         GuessAge guessAge= new GuessAge();
         guessAge.setAge(1);
         guessAge.setCount(123);
@@ -79,6 +72,20 @@ public class UserControllerTests2 {
         guessNation.setCountry(countryList);
 
         doReturn(guessNation).when(restTemplate).getForObject("https://api.nationalize.io/?name={nameE}", GuessNation.class,profileReqAdd.getFirstName());
+    }
+
+    @Test
+    public void testGetPersonHappyPath() {
+
+        ProfileReqAdd profileReqAdd=new ProfileReqAdd();
+        profileReqAdd.setPassword("123456");
+        profileReqAdd.setFirstName("tony");
+        profileReqAdd.setLastName("albert");
+        profileReqAdd.setEmail("testemail@gmail.com");
+        profileReqAdd.setContactNumber("9876654f31");
+        profileReqAdd.setTag("tag");
+
+        extracted(profileReqAdd);
 
         Person person=userController.getPerson(profileReqAdd);
         assertEquals(1,person.getAge());
@@ -92,6 +99,33 @@ public class UserControllerTests2 {
         assertEquals("JE",person.getNationality());
         assertEquals("active",person.getStatus());
         assertEquals("testemail@gmail.com",person.getUsername());
+    }
+
+    @Test
+    public void testGetPersonNullEmail() {
+
+        ProfileReqAdd profileReqAdd=new ProfileReqAdd();
+        profileReqAdd.setPassword("123456");
+        profileReqAdd.setFirstName("tony");
+        profileReqAdd.setLastName("albert");
+        profileReqAdd.setEmail("");
+        profileReqAdd.setContactNumber("9876654f31");
+        profileReqAdd.setTag("tag");
+
+        extracted(profileReqAdd);
+
+        Person person=userController.getPerson(profileReqAdd);
+        assertEquals(1,person.getAge());
+        assertEquals("",person.getEmail());
+        assertEquals("9876654f31",person.getContactNumber());
+        assertEquals("male",person.getGender());
+        assertEquals("tony",person.getFirstName());
+        assertEquals("albert",person.getLastName());
+        assertEquals("123456",person.getPassword());
+        assertEquals("tag",person.getTag());
+        assertEquals("JE",person.getNationality());
+        assertEquals("active",person.getStatus());
+        assertEquals("",person.getUsername());
     }
 
 }
