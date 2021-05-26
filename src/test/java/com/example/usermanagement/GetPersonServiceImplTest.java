@@ -2,16 +2,11 @@ package com.example.usermanagement;
 
 import com.example.usermanagement.entity.*;
 import com.example.usermanagement.service.GetPersonServiceImpl;
-import org.aspectj.lang.annotation.Before;
-import org.junit.jupiter.api.BeforeAll;
-/*import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;*/
-//import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -23,25 +18,19 @@ public class GetPersonServiceImplTest {
     @Mock
     RestTemplate restTemplate;
 
+    @InjectMocks
     private GetPersonServiceImpl getPersonServiceImpl;
+
+    private ProfileReqAdd profileReqAdd;
 
     @BeforeEach
     public void setupMock() {
         MockitoAnnotations.initMocks(this);
-        /*getPersonServiceImpl=new GetPersonServiceImpl();
-        ProfileReqAdd profileReqAdd=new ProfileReqAdd();
-        profileReqAdd.setPassword("123456");
-        profileReqAdd.setFirstName("tony");
-        profileReqAdd.setLastName("albert");
-        profileReqAdd.setEmail("testemail@gmail.com");
-        profileReqAdd.setContactNumber("9876654f31");
-        profileReqAdd.setTag("tag");*/
+        profileReqAdd=new ProfileReqAdd();
     }
 
     @Test
     public void shouldReturnPerson_whenGetPersonIsCalled(){
-        getPersonServiceImpl=new GetPersonServiceImpl();
-        ProfileReqAdd profileReqAdd=new ProfileReqAdd();
         profileReqAdd.setPassword("123456");
         profileReqAdd.setFirstName("tony");
         profileReqAdd.setLastName("albert");
@@ -50,6 +39,7 @@ public class GetPersonServiceImplTest {
         profileReqAdd.setTag("tag");
         extracted(profileReqAdd);
         Person person=getPersonServiceImpl.getPerson(profileReqAdd);
+        System.out.println(person.toString());
     }
 
     private void extracted(ProfileReqAdd profileReqAdd) {

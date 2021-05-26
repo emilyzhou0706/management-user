@@ -16,7 +16,4 @@ public class ProfileReqAdd {
     String contactNumber;
     @Getter @Setter
     String tag;
-
-    public ProfileReqAdd() {
-    }
 }

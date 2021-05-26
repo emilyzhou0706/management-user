@@ -1,3 +1,4 @@
+/*
 package com.example.usermanagement;
 
 import com.example.usermanagement.controller.UserController;
@@ -40,8 +41,10 @@ public class UserControllerTests2 {
         profileReqAdd.setEmail("testemail@gmail.com");
         profileReqAdd.setContactNumber("9876654f31");
         profileReqAdd.setTag("tag");
-    /*    Person person = getPerson(profileReqAdd);
-        doReturn(person2).when(userRepository).save(person1);*/
+    */
+/*    Person person = getPerson(profileReqAdd);
+        doReturn(person2).when(userRepository).save(person1);*//*
+
 
         extracted(profileReqAdd);
         userController.postBody(profileReqAdd);
@@ -129,3 +132,4 @@ public class UserControllerTests2 {
     }
 
 }
+*/

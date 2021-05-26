@@ -39,7 +39,7 @@ public class UserController {
         userRepository.save(person);
     }
 
-    public Person getPerson(ProfileReqAdd profileReqAdd) {
+    /*public Person getPerson(ProfileReqAdd profileReqAdd) {
         GuessAge guessAge =restTemplate.getForObject("https://api.agify.io/?name={nameE}", GuessAge.class, profileReqAdd.getFirstName());
         log.info(guessAge.toString());
 
@@ -59,6 +59,6 @@ public class UserController {
         Person person= new Person(profileReqAdd.getEmail(), profileReqAdd.getPassword(),guessAge.getName(), profileReqAdd.getLastName(), profileReqAdd.getEmail(), profileReqAdd.getContactNumber(),guessAge.getAge(),guessGender.getGender(),guessNation.getCountry().get(0).getCountry_id(), profileReqAdd.getTag(), Status.active.name(),dateString,dateString);
         return person;
     }
-
+*/
 
 }
