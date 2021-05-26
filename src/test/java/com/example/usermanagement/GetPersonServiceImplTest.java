@@ -12,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doReturn;
 
 public class GetPersonServiceImplTest {
@@ -36,10 +37,28 @@ public class GetPersonServiceImplTest {
         profileReqAdd.setLastName("albert");
         profileReqAdd.setEmail("testemail@gmail.com");
         profileReqAdd.setContactNumber("9876654f31");
-        profileReqAdd.setTag("tag");
+        List tag=new ArrayList();
+        tag.add("a");
+        tag.add("b");
+        tag.add("c");
+
+        profileReqAdd.setTag(tag);
         extracted(profileReqAdd);
         Person person=getPersonServiceImpl.getPerson(profileReqAdd);
         System.out.println(person.toString());
+
+        assertEquals(1,person.getAge());
+        assertEquals("testemail@gmail.com",person.getEmail());
+        assertEquals("9876654f31",person.getContactNumber());
+        assertEquals("male",person.getGender());
+        assertEquals("tony",person.getFirstName());
+        assertEquals("albert",person.getLastName());
+        assertEquals("123456",person.getPassword());
+        assertEquals("a:b:c",person.getTag());
+        assertEquals("JE",person.getNationality());
+        assertEquals("active",person.getStatus());
+        assertEquals("testemail@gmail.com",person.getUsername());
+
     }
 
     private void extracted(ProfileReqAdd profileReqAdd) {

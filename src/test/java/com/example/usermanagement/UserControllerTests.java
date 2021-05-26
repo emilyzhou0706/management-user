@@ -49,7 +49,12 @@ public class UserControllerTests {
         profileReqAdd.setLastName("albert");
         profileReqAdd.setEmail("testemail@gmail.com");
         profileReqAdd.setContactNumber("9876654f31");
-        profileReqAdd.setTag("tag");
+//        profileReqAdd.setTag("tag");
+        List tag=new ArrayList();
+        tag.add("a");
+        tag.add("b");
+        tag.add("c");
+        profileReqAdd.setTag(tag);
 
         GuessAge guessAge= new GuessAge();
         guessAge.setAge(1);

@@ -3,6 +3,8 @@ package com.example.usermanagement.entity;
 import lombok.Setter;
 import lombok.Getter;
 
+import java.util.List;
+
 public class ProfileReqAdd {
     @Getter @Setter
     String password;
@@ -15,5 +17,5 @@ public class ProfileReqAdd {
     @Getter @Setter
     String contactNumber;
     @Getter @Setter
-    String tag;
+    List<String> tag;
 }

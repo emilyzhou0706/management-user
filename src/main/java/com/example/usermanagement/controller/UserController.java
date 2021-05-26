@@ -21,8 +21,8 @@ import java.util.Locale;
 @RequestMapping("/api/user-management")
 public class UserController {
     private static final Logger log = LoggerFactory.getLogger(UserManagementApplication.class);
-    @Autowired
-    RestTemplate restTemplate;
+/*    @Autowired
+    RestTemplate restTemplate;*/
 
     @Autowired
     private UserRepository userRepository;

@@ -11,6 +11,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 @Service("getPersonServiceImpl")
 public class GetPersonServiceImpl implements GetPersonService{
@@ -44,7 +45,9 @@ public class GetPersonServiceImpl implements GetPersonService{
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(isoDatePattern);
         String dateString = simpleDateFormat.format(new Date());
 
-        Person person= new Person(profileReqAdd.getEmail(), profileReqAdd.getPassword(),guessAge.getName(), profileReqAdd.getLastName(), profileReqAdd.getEmail(), profileReqAdd.getContactNumber(),guessAge.getAge(),guessGender.getGender(),guessNation.getCountry().get(0).getCountry_id(), profileReqAdd.getTag(), Status.active.name(),dateString,dateString);
+        String tagResult=(String) profileReqAdd.getTag().stream()
+                .collect(Collectors.joining(":"));
+        Person person= new Person(profileReqAdd.getEmail(), profileReqAdd.getPassword(),guessAge.getName(), profileReqAdd.getLastName(), profileReqAdd.getEmail(), profileReqAdd.getContactNumber(),guessAge.getAge(),guessGender.getGender(),guessNation.getCountry().get(0).getCountry_id(), tagResult, Status.active.name(),dateString,dateString);
         return person;
     }
 }
