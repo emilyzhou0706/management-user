@@ -4,6 +4,7 @@ import com.example.usermanagement.*;
 import com.example.usermanagement.constant.Status;
 import com.example.usermanagement.entity.*;
 import com.example.usermanagement.repository.UserRepository;
+import com.example.usermanagement.service.GetPersonServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +27,15 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    GetPersonServiceImpl getPersonServiceImpl;
+
     @PostMapping("/add")
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody void postBody(@RequestBody ProfileReqAdd profileReqAdd) {
 
-        Person person = getPerson(profileReqAdd);
+//        Person person = getPerson(profileReqAdd);
+        Person person = getPersonServiceImpl.getPerson(profileReqAdd);
         userRepository.save(person);
     }
 

@@ -1,15 +1,21 @@
-/*
 package com.example.usermanagement.service;
 
+import com.example.usermanagement.UserManagementApplication;
 import com.example.usermanagement.constant.Status;
 import com.example.usermanagement.entity.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+@Service("getPersonServiceImpl")
 public class GetPersonServiceImpl implements GetPersonService{
+    private static final Logger log = LoggerFactory.getLogger(UserManagementApplication.class);
+
     @Autowired
     RestTemplate restTemplate;
 
@@ -35,4 +41,3 @@ public class GetPersonServiceImpl implements GetPersonService{
         return person;
     }
 }
-*/
