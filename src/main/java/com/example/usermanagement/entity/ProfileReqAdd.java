@@ -17,4 +17,6 @@ public class ProfileReqAdd {
     @Getter @Setter
     String tag;
 
+    public ProfileReqAdd() {
+    }
 }

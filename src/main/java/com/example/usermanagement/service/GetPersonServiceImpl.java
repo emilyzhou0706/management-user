@@ -19,6 +19,13 @@ public class GetPersonServiceImpl implements GetPersonService{
     @Autowired
     RestTemplate restTemplate;
 
+    public GetPersonServiceImpl() {
+    }
+
+    public GetPersonServiceImpl(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
+
     @Override
     public Person getPerson(ProfileReqAdd profileReqAdd) {
         GuessAge guessAge =restTemplate.getForObject("https://api.agify.io/?name={nameE}", GuessAge.class, profileReqAdd.getFirstName());

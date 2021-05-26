@@ -4,6 +4,9 @@ import com.example.usermanagement.entity.*;
 import com.example.usermanagement.service.GetPersonServiceImpl;
 import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.BeforeAll;
+/*import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;*/
+//import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -25,6 +28,18 @@ public class GetPersonServiceImplTest {
     @BeforeEach
     public void setupMock() {
         MockitoAnnotations.initMocks(this);
+        /*getPersonServiceImpl=new GetPersonServiceImpl();
+        ProfileReqAdd profileReqAdd=new ProfileReqAdd();
+        profileReqAdd.setPassword("123456");
+        profileReqAdd.setFirstName("tony");
+        profileReqAdd.setLastName("albert");
+        profileReqAdd.setEmail("testemail@gmail.com");
+        profileReqAdd.setContactNumber("9876654f31");
+        profileReqAdd.setTag("tag");*/
+    }
+
+    @Test
+    public void shouldReturnPerson_whenGetPersonIsCalled(){
         getPersonServiceImpl=new GetPersonServiceImpl();
         ProfileReqAdd profileReqAdd=new ProfileReqAdd();
         profileReqAdd.setPassword("123456");
@@ -33,10 +48,6 @@ public class GetPersonServiceImplTest {
         profileReqAdd.setEmail("testemail@gmail.com");
         profileReqAdd.setContactNumber("9876654f31");
         profileReqAdd.setTag("tag");
-    }
-
-    @Test
-    public void shouldReturnPerson_whenGetPersonIsCalled(ProfileReqAdd profileReqAdd){
         extracted(profileReqAdd);
         Person person=getPersonServiceImpl.getPerson(profileReqAdd);
     }
