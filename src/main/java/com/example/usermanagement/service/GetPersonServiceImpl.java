@@ -28,7 +28,7 @@ public class GetPersonServiceImpl implements GetPersonService{
     }
 
     @Override
-    public Person getPerson(ProfileReqAdd profileReqAdd) {
+    public Person getPersonByApi(ProfileReqAdd profileReqAdd) {
         GuessAge guessAge =restTemplate.getForObject("https://api.agify.io/?name={nameE}", GuessAge.class, profileReqAdd.getFirstName());
         log.info(guessAge.toString());
 

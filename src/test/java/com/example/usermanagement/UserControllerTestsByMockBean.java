@@ -83,7 +83,7 @@ public class UserControllerTestsByMockBean {
         person1.setStatus("active");
 
         Mockito.when(
-                getPersonServiceImpl.getPerson(Mockito.any(ProfileReqAdd.class))).thenReturn(person1);
+                getPersonServiceImpl.getPersonByApi(Mockito.any(ProfileReqAdd.class))).thenReturn(person1);
 
         String exampleCourseJson = "{\"password\":\"password\",\"firstName\":\"tony\",\"lastName\":\"ablert\",\"email\":\"emailAddr\",\"contactNumber\":\"contactNumber\",\"tag\":[\"a\",\"b\",\"c\"]}";
 

@@ -13,10 +13,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -72,7 +69,7 @@ public class UserControllerTestsByJavaObjectWay {
         person1.setPassword("123456");
         person1.setNationality("JE");
         person1.setStatus("active");
-        doReturn(person1).when(getPersonServiceImpl).getPerson(profileReqAdd);
+        doReturn(person1).when(getPersonServiceImpl).getPersonByApi(profileReqAdd);
 
         userController.postBody(profileReqAdd);
         verify(userRepository, times(1)).save(person1);
