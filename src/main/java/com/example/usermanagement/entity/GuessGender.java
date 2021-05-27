@@ -2,15 +2,13 @@ package com.example.usermanagement.entity;
 
 import lombok.Getter;
 import lombok.Setter;
-
+@Getter
+@Setter
 public class GuessGender {
-    @Getter @Setter
     String name;
 
-    @Getter @Setter
     String gender;
 
-    @Getter @Setter
     Long probability;
 
     int count;

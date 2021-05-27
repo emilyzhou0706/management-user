@@ -45,7 +45,7 @@ public class GetPersonServiceImpl implements GetPersonService{
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(isoDatePattern);
         String dateString = simpleDateFormat.format(new Date());
 
-        String tagResult=(String) profileReqAdd.getTag().stream()
+        String tagResult= profileReqAdd.getTag().stream()
                 .collect(Collectors.joining(":"));
         Person person= new Person(profileReqAdd.getEmail(), profileReqAdd.getPassword(),guessAge.getName(), profileReqAdd.getLastName(), profileReqAdd.getEmail(), profileReqAdd.getContactNumber(),guessAge.getAge(),guessGender.getGender(),guessNation.getCountry().get(0).getCountry_id(), tagResult, Status.active.name(),dateString,dateString);
         return person;

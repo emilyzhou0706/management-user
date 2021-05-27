@@ -1,5 +1,3 @@
-/*
-package com.example.usermanagement;*/
 package com.example.usermanagement;
 
 import com.example.usermanagement.controller.UserController;
@@ -19,13 +17,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
+//it's to test the userController in java object way
 @ExtendWith(MockitoExtension.class)
-public class UserControllerTests3 {
+public class UserControllerTestsByJavaObjectWay {
     private static final Logger log = LoggerFactory.getLogger(UserManagementApplication.class);
 
     @Mock
@@ -52,10 +52,11 @@ public class UserControllerTests3 {
         profileReqAdd.setLastName("albert");
         profileReqAdd.setEmail("testemail@gmail.com");
         profileReqAdd.setContactNumber("9876654f31");
-        List tag=new ArrayList();
+      /*  List tag=new ArrayList();
         tag.add("a");
         tag.add("b");
-        tag.add("c");
+        tag.add("c");*/
+        List tag=Arrays.asList("a","b","c");
         profileReqAdd.setTag(tag);
 
         Person person1= new Person();
@@ -73,8 +74,9 @@ public class UserControllerTests3 {
         person1.setStatus("active");
         doReturn(person1).when(getPersonServiceImpl).getPerson(profileReqAdd);
 
-        verify(userRepository, times(1)).save(person1);
         userController.postBody(profileReqAdd);
+        verify(userRepository, times(1)).save(person1);
+
 
     }
 

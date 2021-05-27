@@ -19,6 +19,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
+
+//it's for the old way that doing everything within a controller
 @ExtendWith(MockitoExtension.class)
 public class UserControllerTests2 {
     private static final Logger log = LoggerFactory.getLogger(UserManagementApplication.class);

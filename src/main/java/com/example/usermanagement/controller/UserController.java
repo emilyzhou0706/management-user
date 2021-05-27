@@ -21,44 +21,20 @@ import java.util.Locale;
 @RequestMapping("/api/user-management")
 public class UserController {
     private static final Logger log = LoggerFactory.getLogger(UserManagementApplication.class);
-/*    @Autowired
-    RestTemplate restTemplate;*/
 
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
-    GetPersonServiceImpl getPersonServiceImpl;
+    private GetPersonServiceImpl getPersonServiceImpl;
 
     @PostMapping("/add")
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody void postBody(@RequestBody ProfileReqAdd profileReqAdd) {
 
-//        Person person = getPerson(profileReqAdd);
         Person person = getPersonServiceImpl.getPerson(profileReqAdd);
         userRepository.save(person);
     }
 
-    /*public Person getPerson(ProfileReqAdd profileReqAdd) {
-        GuessAge guessAge =restTemplate.getForObject("https://api.agify.io/?name={nameE}", GuessAge.class, profileReqAdd.getFirstName());
-        log.info(guessAge.toString());
-
-        GuessGender guessGender =restTemplate.getForObject("https://api.genderize.io/?name={nameE}", GuessGender.class, profileReqAdd.getFirstName());
-        log.info(guessGender.toString());
-
-        GuessNation guessNation =restTemplate.getForObject("https://api.nationalize.io/?name={nameE}", GuessNation.class, profileReqAdd.getFirstName());
-        log.info(guessNation.toString());
-
-        guessNation.getCountry().sort(
-                (Country h1, Country h2) -> -h1.getProbability().compareTo(h2.getProbability()));
-
-        String isoDatePattern = "yyyy-MM-dd'T'HH:mm:ssZ";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(isoDatePattern);
-        String dateString = simpleDateFormat.format(new Date());
-
-        Person person= new Person(profileReqAdd.getEmail(), profileReqAdd.getPassword(),guessAge.getName(), profileReqAdd.getLastName(), profileReqAdd.getEmail(), profileReqAdd.getContactNumber(),guessAge.getAge(),guessGender.getGender(),guessNation.getCountry().get(0).getCountry_id(), profileReqAdd.getTag(), Status.active.name(),dateString,dateString);
-        return person;
-    }
-*/
 
 }

@@ -1,5 +1,10 @@
 package com.example.usermanagement.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class GuessAge {
     String name;
     int age;

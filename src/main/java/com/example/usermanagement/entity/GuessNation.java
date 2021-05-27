@@ -3,12 +3,11 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
-
+@Getter
+@Setter
 public class GuessNation {
 
-    @Getter @Setter
     String name;
-    @Getter @Setter
     List<Country> country;
 
     @Override

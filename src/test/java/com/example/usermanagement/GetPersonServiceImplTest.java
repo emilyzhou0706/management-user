@@ -10,6 +10,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -42,6 +43,7 @@ public class GetPersonServiceImplTest {
         tag.add("b");
         tag.add("c");
 
+//        Arrays.asList("a","b","c")
         profileReqAdd.setTag(tag);
         extracted(profileReqAdd);
         Person person=getPersonServiceImpl.getPerson(profileReqAdd);
