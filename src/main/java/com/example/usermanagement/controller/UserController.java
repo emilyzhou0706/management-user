@@ -43,10 +43,23 @@ public class UserController {
     }
 
     @GetMapping("/users/{id}")
-    Person getOne(@PathVariable String id) {
+    public Person getOne(@PathVariable String id) {
 
         return userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
+    }
+
+    @DeleteMapping("/user/{id}")
+    public Map<String, Boolean> deleteUser(@PathVariable(value = "id") String userId) throws Exception {
+        Person person =
+                userRepository
+                        .findById(userId)
+                        .orElseThrow(() -> new ResourceNotFoundException("User not found on :: " + userId));
+
+        userRepository.delete(person);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("deleted", Boolean.TRUE);
+        return response;
     }
 
     @PutMapping("/users/{id}")
@@ -69,19 +82,6 @@ public class UserController {
 
         final Person updatedUser = userRepository.save(person);
         return ResponseEntity.ok(updatedUser);
-    }
-
-    @DeleteMapping("/user/{id}")
-    public Map<String, Boolean> deleteUser(@PathVariable(value = "id") String userId) throws Exception {
-        Person person =
-                userRepository
-                        .findById(userId)
-                        .orElseThrow(() -> new ResourceNotFoundException("User not found on :: " + userId));
-
-        userRepository.delete(person);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return response;
     }
 
 }
