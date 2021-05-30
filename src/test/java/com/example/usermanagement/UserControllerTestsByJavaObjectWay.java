@@ -5,6 +5,7 @@ import com.example.usermanagement.entity.*;
 import com.example.usermanagement.exception.UserNotFoundException;
 import com.example.usermanagement.repository.UserRepository;
 import com.example.usermanagement.service.GetPersonServiceImpl;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -108,7 +109,6 @@ public class UserControllerTestsByJavaObjectWay {
         assertEquals("tony, thomas",joinUserName);
         assertEquals("testemail@gmail.com, testemailSSSS@gmail.com",joinEmail);
         assertEquals("male, male",joinGender);
-
         //?
 //        Iterable<Person> expectedListResult
 //        Arrays.asList({\"username\":\"testemail@gmail.com\", password='123456', firstName='tony', lastName='albertAAA', email='testemail@gmail.com', contactNumber='9876654f31', age=1, gender='male', nationality='JE', tag='tag', status='active', created='null', updated='null'}, {username='testemailSSSS@gmail.com', password='123456', firstName='thomas', lastName='albertBB', email='testemailSSSS@gmail.com', contactNumber='9876654f88', age=10, gender='male', nationality='JE', tag='tag', status='active', created='null', updated='null'});
@@ -155,13 +155,29 @@ public class UserControllerTestsByJavaObjectWay {
         String id=person1.getFirstName();
 
         when(userRepository.findById(id))
-                .thenThrow(new UserNotFoundException(id));
-        Person person=userController.getOne(id);
-        System.out.println(person);
+                .thenThrow(new RuntimeException());
+
+        Assertions.assertThrows(RuntimeException.class, () -> {
+            userController.getOne(id);
+        });
     }
 
     @Test
-    public void testGetOneByIdNormalCase(){
+    public void testGetOneByIdNotFoundCase(){
+        Person person1 = getPerson1();
+        String id=person1.getFirstName();
+
+        when(userRepository.findById(id))
+                .thenReturn(Optional.empty());
+
+        Assertions.assertThrows(UserNotFoundException.class, () -> {
+            userController.getOne(id);
+        });
+    }
+
+
+    @Test
+    public void testGetOneByIdNormalCase() throws UserNotFoundException {
         Person person1 = getPerson1();
         String id=person1.getFirstName();
         //using Optional in mock
@@ -172,16 +188,21 @@ public class UserControllerTestsByJavaObjectWay {
     }
 
     @Test
-    public void testDeleteUserByIdExceptionCase(){
+    public void testDeleteUserByIdExceptionCase() throws UserNotFoundException {
         Person person1 = getPerson1();
         String id=person1.getFirstName();
         when(userRepository.findById(id))
                 .thenThrow(new UserNotFoundException(id));
-        try {
+       /* try {
             userController.deleteUser(id);
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
+//        userController.deleteUser(id);
+
+        Assertions.assertThrows(UserNotFoundException.class, () -> {
+            userController.deleteUser(id);
+        });
     }
 
     @Test
@@ -194,43 +215,47 @@ public class UserControllerTestsByJavaObjectWay {
         when(userRepository.findById(id))
                 .thenReturn(Optional.of(person1));
         try {
-            result= userController.deleteUser(id);
+            userController.deleteUser(id);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        assertEquals("true",result.values());
+//        assertEquals(Boolean.TRUE,result.values().stream().findFirst().get());
+//        assertEquals(Boolean.TRUE,result.get("deleted"));
+
     }
 
     @Test
-    public void testUpdateUserByIdExceptionCase(){
+    public void testUpdateUserByIdExceptionCase() throws UserNotFoundException {
         setUpNormalProfileReqAdd();
         Person person1 = getPerson1();
         String id=person1.getFirstName();
         when(userRepository.findById(id))
                 .thenThrow(new UserNotFoundException(id));
-        try {
+
             userController.updateUser(id,profileReqAdd);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            //or assert e type itself
+            Assertions.assertThrows(UserNotFoundException.class, () -> {
+                userController.updateUser(id, profileReqAdd);
+            });
+
     }
 
     @Test
     public void testUpdateUserNormalCase(){
         setUpNormalProfileReqAdd();
-        ResponseEntity<Person> entity;
 
         Person person1 = getPerson1();
         String id=person1.getFirstName();
         when(userRepository.findById(id))
                 .thenReturn(Optional.of(person1));
         try {
-            entity= userController.updateUser(id,profileReqAdd);
+            ResponseEntity<Person> entity= userController.updateUser(id,profileReqAdd);
             System.out.println(entity);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
 

@@ -3,8 +3,10 @@ package com.example.usermanagement;
 import com.example.usermanagement.controller.UserController;
 import com.example.usermanagement.entity.Person;
 import com.example.usermanagement.entity.ProfileReqAdd;
+import com.example.usermanagement.exception.UserNotFoundException;
 import com.example.usermanagement.repository.UserRepository;
 import com.example.usermanagement.service.GetPersonServiceImpl;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -67,20 +69,8 @@ public class UserControllerTestsByMockBean {
     }
 
     @Test
-    public void retrieveDetailsForCourse() throws Exception {
-        Person person1= new Person();
-        person1.setAge(1);
-        person1.setContactNumber("9876654f31");
-        person1.setEmail("testemail@gmail.com");
-        person1.setUsername("testemail@gmail.com");
-        person1.setGender("male");
-        person1.setFirstName("tony");
-        person1.setPassword("123456");
-        person1.setLastName("albert");
-        person1.setTag("tag");
-        person1.setPassword("123456");
-        person1.setNationality("JE");
-        person1.setStatus("active");
+    public void addUserTestNormalCase() throws Exception {
+        Person person1 = getPerson1();
 
         Mockito.when(
                 getPersonServiceImpl.getPersonByApi(Mockito.any(ProfileReqAdd.class))).thenReturn(person1);
@@ -102,5 +92,72 @@ public class UserControllerTestsByMockBean {
                 .getContentAsString(), false);*/
 
     }
+
+    private Person getPerson1() {
+        Person person1= new Person();
+        person1.setAge(1);
+        person1.setContactNumber("9876654f31");
+        person1.setEmail("testemail@gmail.com");
+        person1.setUsername("testemail@gmail.com");
+        person1.setGender("male");
+        person1.setFirstName("tony");
+        person1.setPassword("123456");
+        person1.setLastName("albert");
+        person1.setTag("tag");
+        person1.setPassword("123456");
+        person1.setNationality("JE");
+        person1.setStatus("active");
+        return person1;
+    }
+
+    @Test
+    public void getAllTestNormalCase() throws Exception {
+
+//        String exampleCourseJson = "{\"password\":\"password\",\"firstName\":\"tony\",\"lastName\":\"ablert\",\"email\":\"emailAddr\",\"contactNumber\":\"contactNumber\",\"tag\":[\"a\",\"b\",\"c\"]}";
+
+
+/*        Mockito.when(
+                getPersonServiceImpl.getPersonByApi(Mockito.any(ProfileReqAdd.class))).thenReturn(person1);*/
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .get("/api/user-management/all");
+        MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+
+        System.out.println(result.getResponse().getStatus());
+        assertEquals(200,result.getResponse().getStatus());
+    }
+
+    @Test
+    public void getByOneNormalCase() throws Exception {
+
+        Person person1 = getPerson1();
+        String id="testemail@gmail.com";
+        Mockito.when(
+                userRepository.findById(Mockito.anyString())).thenReturn(java.util.Optional.of(person1));
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .get("/api/user-management/users/{id}",id);
+        MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+
+        System.out.println(result.getResponse().getStatus());
+        assertEquals(200,result.getResponse().getStatus());
+    }
+
+    @Test
+    public void getByOneUserNotFoundCase() throws Exception {
+
+        Person person1 = getPerson1();
+        String id="testemail@gmail.com";
+        Mockito.when(
+                userRepository.findById(Mockito.anyString())).thenReturn(java.util.Optional.empty());
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .get("/api/user-management/users/{id}",id);
+//        MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+
+//        System.out.println(result.getResponse().getStatus());
+        Assertions.assertThrows(UserNotFoundException.class, () -> {
+            mockMvc.perform(requestBuilder).andReturn();
+        });
+    }
+
 
 }

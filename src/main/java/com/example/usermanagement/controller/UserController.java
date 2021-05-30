@@ -2,7 +2,6 @@ package com.example.usermanagement.controller;
 
 import com.example.usermanagement.*;
 import com.example.usermanagement.entity.*;
-import com.example.usermanagement.exception.ResourceNotFoundException;
 import com.example.usermanagement.exception.UserNotFoundException;
 import com.example.usermanagement.repository.UserRepository;
 import com.example.usermanagement.service.GetPersonServiceImpl;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -38,39 +38,40 @@ public class UserController {
     }
 
     @GetMapping(path="/all")
-    public @ResponseBody Iterable<Person> getAllUsers() {
+    public @ResponseBody List<Person> getAllUsers() {
         return userRepository.findAll();
     }
 
     @GetMapping("/users/{id}")
-    public Person getOne(@PathVariable String id) {
+    public Person getOne(@PathVariable String id) throws UserNotFoundException {
 
         return userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
     }
 
     @DeleteMapping("/user/{id}")
-    public Map<String, Boolean> deleteUser(@PathVariable(value = "id") String userId) throws Exception {
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteUser(@PathVariable(value = "id") String userId) throws UserNotFoundException {
         Person person =
                 userRepository
                         .findById(userId)
-                        .orElseThrow(() -> new ResourceNotFoundException("User not found on :: " + userId));
+                        .orElseThrow(() -> new UserNotFoundException("User not found on :: " + userId));
 
         userRepository.delete(person);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return response;
+        /*
+        *
+        *
+        * */
     }
 
     @PutMapping("/users/{id}")
     public ResponseEntity<Person> updateUser(
-            @PathVariable(value = "id") String userId, @Valid @RequestBody ProfileReqAdd profileReqAdd)
-            throws ResourceNotFoundException {
+            @PathVariable(value = "id") String userId, @Valid @RequestBody ProfileReqAdd profileReqAdd) throws UserNotFoundException {
 
         Person person =
                 userRepository
                         .findById(userId)
-                        .orElseThrow(() -> new ResourceNotFoundException("User not found on :: " + userId));
+                        .orElseThrow(() -> new UserNotFoundException("User not found on :: " + userId));
 
         person.setTag(profileReqAdd.getTag().stream()
                 .collect(Collectors.joining(":")));
@@ -82,6 +83,7 @@ public class UserController {
 
         final Person updatedUser = userRepository.save(person);
         return ResponseEntity.ok(updatedUser);
+        //ke yi return
     }
 
 }
