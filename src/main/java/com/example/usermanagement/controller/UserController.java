@@ -50,7 +50,7 @@ public class UserController {
     }
 
     @DeleteMapping("/user/{id}")
-    @ResponseStatus(HttpStatus.OK)
+//    @ResponseStatus(HttpStatus.OK)
     public void deleteUser(@PathVariable(value = "id") String userId) throws UserNotFoundException {
         Person person =
                 userRepository
@@ -58,10 +58,6 @@ public class UserController {
                         .orElseThrow(() -> new UserNotFoundException("User not found on :: " + userId));
 
         userRepository.delete(person);
-        /*
-        *
-        *
-        * */
     }
 
     @PutMapping("/users/{id}")

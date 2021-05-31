@@ -45,7 +45,7 @@ public class UserControllerTestsByJavaObjectWay {
         MockitoAnnotations.initMocks(this);
         profileReqAdd=new ProfileReqAdd();
     }
-
+    //test case 1.1
     @Test
     public void testPostBody(){
         setUpNormalProfileReqAdd();
@@ -80,7 +80,7 @@ public class UserControllerTestsByJavaObjectWay {
         List tag=Arrays.asList("a","b","c");
         profileReqAdd.setTag(tag);
     }
-
+    //test case 2.1
     @Test
     public void testGetAllUsers(){
         //is it too bad to init like this?
@@ -148,7 +148,7 @@ public class UserControllerTestsByJavaObjectWay {
         person1.setStatus("active");
         return person1;
     }
-
+    //test case 3.1
     @Test
     public void testGetOneByIdExcepotionUserNotFoundCase(){
         Person person1 = getPerson1();
@@ -161,6 +161,7 @@ public class UserControllerTestsByJavaObjectWay {
             userController.getOne(id);
         });
     }
+    //test case 3.2
 
     @Test
     public void testGetOneByIdNotFoundCase(){
@@ -175,7 +176,7 @@ public class UserControllerTestsByJavaObjectWay {
         });
     }
 
-
+    //test case 3.3
     @Test
     public void testGetOneByIdNormalCase() throws UserNotFoundException {
         Person person1 = getPerson1();
@@ -186,25 +187,18 @@ public class UserControllerTestsByJavaObjectWay {
         Person personResult=userController.getOne(id);
         assertEquals("testemail@gmail.com",personResult.getEmail());
     }
-
+    //test case 4.1
     @Test
     public void testDeleteUserByIdExceptionCase() throws UserNotFoundException {
         Person person1 = getPerson1();
         String id=person1.getFirstName();
         when(userRepository.findById(id))
                 .thenThrow(new UserNotFoundException(id));
-       /* try {
-            userController.deleteUser(id);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
-//        userController.deleteUser(id);
-
         Assertions.assertThrows(UserNotFoundException.class, () -> {
             userController.deleteUser(id);
         });
     }
-
+    //test case 4.2
     @Test
     public void testDeleteUserNormalCase(){
         //should i do this to change to HashMap?
@@ -223,7 +217,7 @@ public class UserControllerTestsByJavaObjectWay {
 //        assertEquals(Boolean.TRUE,result.get("deleted"));
 
     }
-
+    //test case 5.1
     @Test
     public void testUpdateUserByIdExceptionCase() throws UserNotFoundException {
         setUpNormalProfileReqAdd();
@@ -239,7 +233,7 @@ public class UserControllerTestsByJavaObjectWay {
             });
 
     }
-
+    //test case 5.2
     @Test
     public void testUpdateUserNormalCase(){
         setUpNormalProfileReqAdd();
