@@ -59,20 +59,6 @@ public class UserControllerTestsByMockBean {
         MockitoAnnotations.initMocks(this);
         profileReqAdd=new ProfileReqAdd();
     }
-    //test case 1.1
-    @Test
-    public void testPostBody(){
-        /*profileReqAdd.setPassword("123456");
-        profileReqAdd.setFirstName("tony");
-        profileReqAdd.setLastName("albert");
-        profileReqAdd.setEmail("testemail@gmail.com");
-        profileReqAdd.setContactNumber("9876654f31");
-        List tag=new ArrayList();
-        tag.add("a");
-        tag.add("b");
-        tag.add("c");
-        profileReqAdd.setTag(tag);*/
-    }
 
     //test case 1.1
     @Test

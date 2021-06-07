@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.stream.Collectors;
 
@@ -39,7 +40,7 @@ public class GetPersonServiceImpl implements GetPersonService{
         log.info(guessNation.toString());
 
         guessNation.getCountry().sort(
-                (Country h1, Country h2) -> -h1.getProbability().compareTo(h2.getProbability()));
+                (h1, h2) -> -h1.getProbability().compareTo(h2.getProbability()));
 
         String isoDatePattern = "yyyy-MM-dd'T'HH:mm:ssZ";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(isoDatePattern);

@@ -45,6 +45,15 @@ public class UserControllerTestsByJavaObjectWay {
         MockitoAnnotations.initMocks(this);
         profileReqAdd=new ProfileReqAdd();
     }
+    private void setUpNormalProfileReqAdd() {
+        profileReqAdd.setPassword("123456");
+        profileReqAdd.setFirstName("tony");
+        profileReqAdd.setLastName("albert");
+        profileReqAdd.setEmail("testemail@gmail.com");
+        profileReqAdd.setContactNumber("9876654f31");
+        List tag=Arrays.asList("a","b","c");
+        profileReqAdd.setTag(tag);
+    }
     //test case 1.1
     @Test
     public void testPostBody(){
@@ -69,16 +78,6 @@ public class UserControllerTestsByJavaObjectWay {
 
         userController.postBody(profileReqAdd);
         verify(userRepository, times(1)).save(person1);
-    }
-
-    private void setUpNormalProfileReqAdd() {
-        profileReqAdd.setPassword("123456");
-        profileReqAdd.setFirstName("tony");
-        profileReqAdd.setLastName("albert");
-        profileReqAdd.setEmail("testemail@gmail.com");
-        profileReqAdd.setContactNumber("9876654f31");
-        List tag=Arrays.asList("a","b","c");
-        profileReqAdd.setTag(tag);
     }
     //test case 2.1
     @Test
@@ -109,10 +108,138 @@ public class UserControllerTestsByJavaObjectWay {
         assertEquals("tony, thomas",joinUserName);
         assertEquals("testemail@gmail.com, testemailSSSS@gmail.com",joinEmail);
         assertEquals("male, male",joinGender);
-        //?
-//        Iterable<Person> expectedListResult
-//        Arrays.asList({\"username\":\"testemail@gmail.com\", password='123456', firstName='tony', lastName='albertAAA', email='testemail@gmail.com', contactNumber='9876654f31', age=1, gender='male', nationality='JE', tag='tag', status='active', created='null', updated='null'}, {username='testemailSSSS@gmail.com', password='123456', firstName='thomas', lastName='albertBB', email='testemailSSSS@gmail.com', contactNumber='9876654f88', age=10, gender='male', nationality='JE', tag='tag', status='active', created='null', updated='null'});
-//        Arrays.asList({ /"created"=/"null", /"updated"=/"null"});
+    }
+
+
+    //test case 3.1
+    @Test
+    public void testGetOneByIdExcepotionCase(){
+        Person person1 = getPerson1();
+        String id=person1.getFirstName();
+
+        when(userRepository.findById(id))
+                .thenThrow(new RuntimeException());
+
+        Assertions.assertThrows(RuntimeException.class, () -> {
+            userController.getOne(id);
+        });
+    }
+    //test case 3.2
+    @Test
+    public void testGetOneByIdNotFoundCase(){
+        Person person1 = getPerson1();
+        String id=person1.getFirstName();
+
+        when(userRepository.findById(id))
+                .thenReturn(Optional.empty());
+
+        Assertions.assertThrows(UserNotFoundException.class, () -> {
+            userController.getOne(id);
+        });
+    }
+
+    //test case 3.3
+    @Test
+    public void testGetOneByIdNormalCase() throws UserNotFoundException {
+        Person person1 = getPerson1();
+        String id=person1.getFirstName();
+        //using Optional in mock
+        when(userRepository.findById(id))
+                .thenReturn(Optional.of(person1));
+        Person personResult=userController.getOne(id);
+        assertEquals("testemail@gmail.com",personResult.getEmail());
+    }
+    //test case 4.1
+    @Test
+    public void testDeleteUserByIdExceptionCase() throws UserNotFoundException {
+        Person person1 = getPerson1();
+        String id=person1.getFirstName();
+        when(userRepository.findById(id))
+                .thenThrow(new RuntimeException());
+        Assertions.assertThrows(RuntimeException.class, () -> {
+            userController.deleteUser(id);
+        });
+    }
+    //test case 4.2
+    @Test
+    public void testDeleteUserNormalCase(){
+        //should i do this to change to HashMap?
+        Map<String, Boolean> result=new HashMap<>();
+
+        Person person1 = getPerson1();
+        String id=person1.getFirstName();
+        when(userRepository.findById(id))
+                .thenReturn(Optional.of(person1));
+        try {
+            userController.deleteUser(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+//        assertEquals(Boolean.TRUE,result.values().stream().findFirst().get());
+//        assertEquals(Boolean.TRUE,result.get("deleted"));
+    }
+    //test case 4.3
+
+    @Test
+    public void testDeleteNotFoundCase(){
+        Person person1 = getPerson1();
+        String id=person1.getFirstName();
+
+        when(userRepository.findById(id))
+                .thenReturn(Optional.empty());
+
+        Assertions.assertThrows(UserNotFoundException.class, () -> {
+            userController.deleteUser(id);
+        });
+    }
+    //test case 5.1
+    @Test
+    public void testUpdateUserByIdExceptionCase() throws UserNotFoundException {
+        setUpNormalProfileReqAdd();
+        Person person1 = getPerson1();
+        String id=person1.getFirstName();
+        when(userRepository.findById(id))
+                .thenThrow(new RuntimeException());
+
+            //or assert e type itself
+            Assertions.assertThrows(RuntimeException.class, () -> {
+                userController.updateUser(id, profileReqAdd);
+            });
+
+    }
+    //test case 5.2
+    @Test
+    public void testUpdateUserNormalCase(){
+        setUpNormalProfileReqAdd();
+
+        Person person1 = getPerson1();
+        String id=person1.getFirstName();
+        when(userRepository.findById(id))
+                .thenReturn(Optional.of(person1));
+        ResponseEntity<Person> entity= null;
+        try {
+            entity = userController.updateUser(id,profileReqAdd);
+        } catch (UserNotFoundException e) {
+            e.printStackTrace();
+        }
+        System.out.println(entity);
+
+
+    }
+    //test case 5.3
+    @Test
+    public void testUpdateNotFoundCase(){
+        setUpNormalProfileReqAdd();
+
+        Person person1 = getPerson1();
+        String id=person1.getFirstName();
+
+        when(userRepository.findById(id))
+                .thenReturn(Optional.empty());
+
+        Assertions.assertThrows(UserNotFoundException.class, () -> {
+            userController.updateUser(id,profileReqAdd);
+        });
     }
 
     private Person getPerson2() {
@@ -148,111 +275,6 @@ public class UserControllerTestsByJavaObjectWay {
         person1.setStatus("active");
         return person1;
     }
-    //test case 3.1
-    @Test
-    public void testGetOneByIdExcepotionUserNotFoundCase(){
-        Person person1 = getPerson1();
-        String id=person1.getFirstName();
-
-        when(userRepository.findById(id))
-                .thenThrow(new RuntimeException());
-
-        Assertions.assertThrows(RuntimeException.class, () -> {
-            userController.getOne(id);
-        });
-    }
-    //test case 3.2
-
-    @Test
-    public void testGetOneByIdNotFoundCase(){
-        Person person1 = getPerson1();
-        String id=person1.getFirstName();
-
-        when(userRepository.findById(id))
-                .thenReturn(Optional.empty());
-
-        Assertions.assertThrows(UserNotFoundException.class, () -> {
-            userController.getOne(id);
-        });
-    }
-
-    //test case 3.3
-    @Test
-    public void testGetOneByIdNormalCase() throws UserNotFoundException {
-        Person person1 = getPerson1();
-        String id=person1.getFirstName();
-        //using Optional in mock
-        when(userRepository.findById(id))
-                .thenReturn(Optional.of(person1));
-        Person personResult=userController.getOne(id);
-        assertEquals("testemail@gmail.com",personResult.getEmail());
-    }
-    //test case 4.1
-    @Test
-    public void testDeleteUserByIdExceptionCase() throws UserNotFoundException {
-        Person person1 = getPerson1();
-        String id=person1.getFirstName();
-        when(userRepository.findById(id))
-                .thenThrow(new UserNotFoundException(id));
-        Assertions.assertThrows(UserNotFoundException.class, () -> {
-            userController.deleteUser(id);
-        });
-    }
-    //test case 4.2
-    @Test
-    public void testDeleteUserNormalCase(){
-        //should i do this to change to HashMap?
-        Map<String, Boolean> result=new HashMap<>();
-
-        Person person1 = getPerson1();
-        String id=person1.getFirstName();
-        when(userRepository.findById(id))
-                .thenReturn(Optional.of(person1));
-        try {
-            userController.deleteUser(id);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-//        assertEquals(Boolean.TRUE,result.values().stream().findFirst().get());
-//        assertEquals(Boolean.TRUE,result.get("deleted"));
-
-    }
-    //test case 5.1
-    @Test
-    public void testUpdateUserByIdExceptionCase() throws UserNotFoundException {
-        setUpNormalProfileReqAdd();
-        Person person1 = getPerson1();
-        String id=person1.getFirstName();
-        when(userRepository.findById(id))
-                .thenThrow(new UserNotFoundException(id));
-
-            userController.updateUser(id,profileReqAdd);
-            //or assert e type itself
-            Assertions.assertThrows(UserNotFoundException.class, () -> {
-                userController.updateUser(id, profileReqAdd);
-            });
-
-    }
-    //test case 5.2
-    @Test
-    public void testUpdateUserNormalCase(){
-        setUpNormalProfileReqAdd();
-
-        Person person1 = getPerson1();
-        String id=person1.getFirstName();
-        when(userRepository.findById(id))
-                .thenReturn(Optional.of(person1));
-        try {
-            ResponseEntity<Person> entity= userController.updateUser(id,profileReqAdd);
-            System.out.println(entity);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-
 }
 
 

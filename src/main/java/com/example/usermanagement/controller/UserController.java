@@ -50,7 +50,6 @@ public class UserController {
     }
 
     @DeleteMapping("/user/{id}")
-//    @ResponseStatus(HttpStatus.OK)
     public void deleteUser(@PathVariable(value = "id") String userId) throws UserNotFoundException {
         Person person =
                 userRepository
